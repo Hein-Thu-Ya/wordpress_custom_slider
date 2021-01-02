@@ -3,7 +3,6 @@
 /**
  * Create Custo Post Type for Slideres
 */
-
 function create_slider_post_type() {
 
 	$labels = array(
@@ -32,18 +31,14 @@ function create_slider_post_type() {
 		'menu_icon'=>'dashicons-format-image',
 		'supports' => array(
 			'title',
-			'thumbnail'
+			'thumbnail',
+			'editor'
 		),
 	);
 	register_post_type( 'slider', $args);
 
 }
 add_action( 'init', 'create_slider_post_type' );
-
-add_action( 'init', function() {
-    remove_post_type_support( 'slider', 'editor' );
-    remove_post_type_support( 'slider', 'slug' );
-} );
 
 // Slider Setting
 function theme_admin_page(){
@@ -75,8 +70,22 @@ function mytheme_customize_css()
 {
     ?>
          <style type="text/css">
-            .carousel-item img {  height: <?php echo get_option('sliderHeight'); ?>px; width:100%; }
+            .carousel-item img {  height: <?php echo get_option('sliderHeight', 500); ?>px; width:100%; }
          </style>
     <?php
 }
 add_action( 'wp_head', 'mytheme_customize_css');
+
+// Post & Page Feature Image
+function mytheme_post_thumbnails() {
+    add_theme_support( 'post-thumbnails' );
+}
+add_action( 'after_setup_theme', 'mytheme_post_thumbnails' );
+
+// Menus
+function my_cool_menu_function(){
+    register_nav_menus( array(
+        'primary-menu' => 'Primary Menu',
+    ));
+}
+add_action( 'after_setup_theme', 'my_cool_menu_function' );
